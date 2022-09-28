@@ -1,6 +1,7 @@
 package com.example.app.driveyourday.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,7 +27,7 @@ fun HomeScreen(groups: List<DriveTimerGroup>) {
 
 @Composable
 fun TimerCards(groups: List<DriveTimerGroup>) {
-    LazyColumn {
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(groups, key = { it.id!! }) {//TODO remove !!
             TimerCard(timerGroup = it)
         }
@@ -35,7 +36,7 @@ fun TimerCards(groups: List<DriveTimerGroup>) {
 
 @Composable
 fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.padding(8.dp)) {
+    Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = timerGroup.name,

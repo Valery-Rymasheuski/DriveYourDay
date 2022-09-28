@@ -1,7 +1,9 @@
 package com.example.app.driveyourday.di.modules
 
 import com.example.app.driveyourday.data.repository.DriveTimerGroupsRepositoryImpl
+import com.example.app.driveyourday.data.repository.DriveTimersRepositoryImpl
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
+import com.example.app.driveyourday.domain.repository.DriveTimersRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -9,9 +11,11 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class RepositoryModule {
+abstract class DataModule {
 
     @Binds
     abstract fun bindsDriveTimerGroupsRepositoryImpl(repository: DriveTimerGroupsRepositoryImpl): DriveTimerGroupsRepository
 
+    @Binds
+    abstract fun bindsDriveTimerRepository(repository: DriveTimersRepositoryImpl): DriveTimersRepository
 }
