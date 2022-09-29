@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
-import com.example.app.driveyourday.util.constants.dummyTimerGroups
+import com.example.app.driveyourday.util.constants.getDummyTimerGroups
 
 @Composable
 fun HomeScreen(uiState: HomeUiState) {
@@ -64,5 +64,5 @@ fun TimerButton(timer: DriveTimer, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    TimerCards(dummyTimerGroups)
+    TimerCards(getDummyTimerGroups())
 }

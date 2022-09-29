@@ -9,5 +9,5 @@ data class DriveTimerGroupEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "order_number") val orderNumber: Int,
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "group_id") val id: Int = 0
+    @ColumnInfo(name = "group_id") val id: Long = 0
 )
