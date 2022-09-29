@@ -1,24 +1,18 @@
 package com.example.app.driveyourday.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Transaction
 import com.example.app.driveyourday.data.local.entity.DriveTimerGroupEntity
+import com.example.app.driveyourday.data.local.entity.TimerGroupWithTimers
 
 @Dao
-interface TimerGroupDao {
-
-    @Insert
-    suspend fun insert(group: DriveTimerGroupEntity): Long
-
-    @Update
-    suspend fun update(group: DriveTimerGroupEntity)
-
-    @Delete
-    suspend fun delete(group: DriveTimerGroupEntity)
+interface TimerGroupDao : BaseDao<DriveTimerGroupEntity> {
 
     @Query("SELECT * FROM dyd_timer_group")
     suspend fun getAll(): List<DriveTimerGroupEntity>
+
+    @Transaction
+    @Query("SELECT * FROM dyd_timer_group")
+    suspend fun getGroupWithTimers(): List<TimerGroupWithTimers>
 }

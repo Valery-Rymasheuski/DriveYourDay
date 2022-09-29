@@ -9,8 +9,8 @@ import javax.inject.Provider
 
 class InitialTimersCallback(
     private val provider: Provider<TimerDao>,
-    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO, //TODO move
-    private val applicationScope: CoroutineScope = CoroutineScope(SupervisorJob())//TODO move,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val applicationScope: CoroutineScope,
 ) : RoomDatabase.Callback() {
 
     override fun onCreate(db: SupportSQLiteDatabase) {

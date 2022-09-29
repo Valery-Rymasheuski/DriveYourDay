@@ -10,6 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Provider
 import javax.inject.Singleton
 
@@ -23,6 +25,8 @@ class DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
+        @ApplicationScope externalScope: CoroutineScope,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher,
         timerDaoProvider: Provider<TimerDao>
     ): DriveYourDayDatabase {
         return androidx.room.Room.databaseBuilder(
@@ -30,7 +34,7 @@ class DatabaseModule {
             DriveYourDayDatabase::class.java,
             DATABASE_NAME
         ).fallbackToDestructiveMigration()
-            .addCallback(InitialTimersCallback(timerDaoProvider))
+            .addCallback(InitialTimersCallback(timerDaoProvider, ioDispatcher, externalScope))
             .build()
     }
 

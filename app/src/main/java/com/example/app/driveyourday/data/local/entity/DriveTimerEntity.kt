@@ -2,9 +2,18 @@ package com.example.app.driveyourday.data.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "dyd_timer")
+@Entity(
+    tableName = "dyd_timer", foreignKeys = arrayOf(
+        ForeignKey(
+            entity = DriveTimerGroupEntity::class,
+            parentColumns = arrayOf("group_id"),
+            childColumns = arrayOf("group_id"),
+        )
+    )
+)
 data class DriveTimerEntity(
     @ColumnInfo(name = "label") val label: String,
     @ColumnInfo(name = "color") val color: Long,
