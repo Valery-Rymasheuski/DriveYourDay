@@ -6,18 +6,16 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "dyd_timer", foreignKeys = arrayOf(
-        ForeignKey(
-            entity = DriveTimerGroupEntity::class,
-            parentColumns = arrayOf("group_id"),
-            childColumns = arrayOf("group_id"),
-        )
-    )
+    tableName = "dyd_timer", foreignKeys = [ForeignKey(
+        entity = DriveTimerGroupEntity::class,
+        parentColumns = arrayOf("group_id"),
+        childColumns = arrayOf("group_id"),
+    )]
 )
 data class DriveTimerEntity(
     @ColumnInfo(name = "label") val label: String,
     @ColumnInfo(name = "color") val color: Long,
-    @ColumnInfo(name = "group_id") val groupId: Long = 0,
+    @ColumnInfo(name = "group_id") var groupId: Long = 0,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "timer_id") val id: Long = 0,
 )

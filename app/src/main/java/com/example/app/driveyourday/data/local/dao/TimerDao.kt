@@ -6,23 +6,26 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.example.app.driveyourday.data.local.entity.DriveTimerEntity
 import com.example.app.driveyourday.data.local.entity.DriveTimerGroupEntity
+import com.example.app.driveyourday.data.util.isNotValidEntityId
 
 @Dao
-interface TimerDao : BaseDao<DriveTimerEntity>{
+interface TimerDao : BaseDao<DriveTimerEntity> {
 
     @Insert
     suspend fun insert(group: DriveTimerGroupEntity): Long
 
+    @Insert
+    suspend fun insert(timers: List<DriveTimerEntity>)
+
     @Transaction
-    suspend fun insert(group: DriveTimerGroupEntity, vararg timers: DriveTimerEntity) {
-        val groupId = if (group.id <= 0) { //TODO
+    suspend fun insert(group: DriveTimerGroupEntity, timers: List<DriveTimerEntity>) {
+        val groupId = if (group.id.isNotValidEntityId()) {
             insert(group)
         } else {
             group.id
         }
-
-        val list = timers.map { it.copy(groupId = groupId) }
-        insert(*list.toTypedArray())
+        timers.forEach { it.groupId = groupId }
+        insert(timers)
     }
 
     @Query("SELECT * FROM dyd_timer")

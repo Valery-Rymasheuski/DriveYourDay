@@ -7,9 +7,7 @@ import com.example.app.driveyourday.data.mappers.DriveTimerMapper
 import com.example.app.driveyourday.di.modules.IoDispatcher
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class DriveTimerGroupsRepositoryImpl @Inject constructor(
@@ -23,13 +21,23 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
     override suspend fun getGroupsWithTimers(): List<DriveTimerGroup> =
         withContext(ioDispatcher) {
 
-            localGroupsDataSource.getGroupWithTimers()
-                .map { (group, timers) -> groupMapper.fromEntity(group, timers) }
-
-            /* val groups = localGroupsDataSource.getAll() //TODO do in parallel
-             val timers = localTimersDataSource.getAll()
-
-             val timersMap = timers.groupBy { it.groupId }
-             groups.map { groupMapper.fromEntity(it, timersMap.getOrElse(it.id) { emptyList() }) }*/
+            getGroupsWithTimersUsingRelation()
+           // getGroupsWithTimersParallel()
         }
+
+    private suspend fun getGroupsWithTimersUsingRelation() =
+        localGroupsDataSource.getGroupWithTimers()
+            .map { (group, timers) -> groupMapper.fromEntity(group, timers) }
+
+    private suspend fun getGroupsWithTimersParallel(): List<DriveTimerGroup> {
+        return coroutineScope {
+            val groupsDeferred = async { localGroupsDataSource.getAll() }
+            val timersDeferred = async { localTimersDataSource.getAll() }
+            val groups = groupsDeferred.await()
+            val timers = timersDeferred.await()
+
+            val timersMap = timers.groupBy { it.groupId }
+            groups.map { groupMapper.fromEntity(it, timersMap.getOrElse(it.id) { emptyList() }) }
+        }
+    }
 }

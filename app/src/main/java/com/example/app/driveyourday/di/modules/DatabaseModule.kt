@@ -27,14 +27,20 @@ class DatabaseModule {
         @ApplicationContext context: Context,
         @ApplicationScope externalScope: CoroutineScope,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
-        timerDaoProvider: Provider<TimerDao>
+        dbProvider: Provider<DriveYourDayDatabase>
     ): DriveYourDayDatabase {
         return androidx.room.Room.databaseBuilder(
             context,
             DriveYourDayDatabase::class.java,
             DATABASE_NAME
         ).fallbackToDestructiveMigration()
-            .addCallback(InitialTimersCallback(timerDaoProvider, ioDispatcher, externalScope))
+            .addCallback(
+                InitialTimersCallback(
+                    dbProvider,
+                    ioDispatcher,
+                    externalScope
+                )
+            )
             .build()
     }
 
