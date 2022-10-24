@@ -5,8 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.app.driveyourday.ui.screens.HomeRoute
-import com.example.app.driveyourday.ui.screens.SettingsRoute
+import com.example.app.driveyourday.ui.screens.*
 
 @Composable
 fun DriveNavGraph(
@@ -20,8 +19,14 @@ fun DriveNavGraph(
         composable(DriveDestinations.HOME.name) {
             HomeRoute()
         }
-        composable(DriveDestinations.SETTINGS.name){
+        composable(DriveDestinations.SETTINGS.name) {
             SettingsRoute()
+        }
+        composable(DriveDestinations.EDIT_TIMERS.name) {
+            EditTimerListRoute()
+        }
+        composable(DriveDestinations.ADD_TIMER.name) {
+            AddTimerRoute()
         }
     }
 }

@@ -28,7 +28,7 @@ fun HomeScreen(groups: List<DriveTimerGroup>) {
 @Composable
 fun TimerCards(groups: List<DriveTimerGroup>) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(groups, key = { it.id!! }) {//TODO remove !!
+        items(groups, key = { it.id }) {
             TimerCard(timerGroup = it)
         }
     }
@@ -36,7 +36,9 @@ fun TimerCards(groups: List<DriveTimerGroup>) {
 
 @Composable
 fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.fillMaxWidth().padding(8.dp)) {
+    Card(modifier = modifier
+        .fillMaxWidth()
+        .padding(8.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = timerGroup.name,

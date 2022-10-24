@@ -4,5 +4,5 @@ import com.example.app.driveyourday.domain.model.DriveTimer
 
 interface DriveTimersRepository {
 
-    fun getTimers(): List<DriveTimer>
+    suspend fun getTimers(): List<DriveTimer>
 }
