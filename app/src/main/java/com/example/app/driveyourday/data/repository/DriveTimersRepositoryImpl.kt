@@ -18,4 +18,8 @@ class DriveTimersRepositoryImpl @Inject constructor(
     override suspend fun getTimers(): List<DriveTimer> = withContext(ioDispatcher) {
         localDataSource.getAll().map { timerMapper.fromEntity(it) }
     }
+
+    override suspend fun save(timer: DriveTimer) = withContext(ioDispatcher) {
+        localDataSource.insert(timerMapper.toEntity(timer))
+    }
 }

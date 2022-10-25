@@ -1,5 +1,7 @@
 package com.example.app.driveyourday.data.util
 
-fun Long.isValidEntityId() = this > 0
+const val ENTITY_EMPTY_ID = 0L
 
-fun Long.isNotValidEntityId() = this <= 0
+fun Long.isValidEntityId() = this > ENTITY_EMPTY_ID
+
+fun Long.isNotValidEntityId() = this <= ENTITY_EMPTY_ID

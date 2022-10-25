@@ -8,6 +8,7 @@ import com.example.app.driveyourday.data.mappers.DriveTimerMapper
 import com.example.app.driveyourday.data.mappers.mapColorToLong
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
+import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import java.util.UUID
 
 val dummyTimerGroupEntities = listOf(
@@ -33,6 +34,10 @@ fun getDummyTimerGroups(): List<DriveTimerGroup> {
     }
 }
 
-fun getDummyTimers() : List<DriveTimer>{
-    return getDummyTimerGroups().flatMap{ it.timers }
+fun getDummyTimers(): List<DriveTimer> {
+    return getDummyTimerGroups().flatMap { it.timers }
+}
+
+fun getDummyGroupsSimple(): List<DriveTimerGroupSimple> {
+    return getDummyTimerGroups().map { DriveTimerGroupSimple(it.id, it.name) }
 }

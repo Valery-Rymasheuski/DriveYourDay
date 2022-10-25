@@ -1,7 +1,15 @@
 package com.example.app.driveyourday.ui.screens
 
-import com.example.app.driveyourday.domain.model.DriveTimer
+import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
+import com.example.app.driveyourday.util.NamedColor
 
 data class AddTimerUiState(
-    val label: String? = null  //TODO
-)
+    val groups: List<DriveTimerGroupSimple> = emptyList(),
+    val colors: List<NamedColor> = emptyList(),
+    val timerName: String = "",
+    val selectedTimerGroup: DriveTimerGroupSimple? = null,
+    val selectedColor: NamedColor? = null
+) {
+    fun isFieldsValid() = timerName.isNotBlank() && selectedTimerGroup != null
+            && selectedColor != null
+}

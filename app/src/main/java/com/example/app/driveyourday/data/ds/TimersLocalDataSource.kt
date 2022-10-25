@@ -12,4 +12,8 @@ class TimersLocalDataSource @Inject constructor(private val dao: TimerDao) {
     suspend fun insert(group: DriveTimerGroupEntity, timers: List<DriveTimerEntity>) =
         dao.insert(group, timers)
 
+    suspend fun insert(timer: DriveTimerEntity){
+        dao.insert(timer)
+    }
+
 }

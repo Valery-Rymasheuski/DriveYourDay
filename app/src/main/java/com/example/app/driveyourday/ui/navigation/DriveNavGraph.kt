@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.app.driveyourday.ui.screens.*
 
+fun NavHostController.navigate(route: DriveDestinations) = navigate(route.name)
+
 @Composable
 fun DriveNavGraph(
     navController: NavHostController = rememberNavController(),
@@ -26,7 +28,8 @@ fun DriveNavGraph(
             EditTimerListRoute()
         }
         composable(DriveDestinations.ADD_TIMER.name) {
-            AddTimerRoute()
+            AddTimerScreen(onCancelButtonClick = { navController.navigateUp() },
+                onSaveSuccessNavigate = { navController.navigate(DriveDestinations.HOME) })
         }
     }
 }

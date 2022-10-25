@@ -6,6 +6,7 @@ import com.example.app.driveyourday.data.mappers.DriveTimerGroupMapper
 import com.example.app.driveyourday.data.mappers.DriveTimerMapper
 import com.example.app.driveyourday.di.modules.IoDispatcher
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
+import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -22,7 +23,12 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
         withContext(ioDispatcher) {
 
             getGroupsWithTimersUsingRelation()
-           // getGroupsWithTimersParallel()
+            // getGroupsWithTimersParallel()
+        }
+
+    override suspend fun getSimpleGroups(): List<DriveTimerGroupSimple> =
+        withContext(ioDispatcher) {
+            localGroupsDataSource.getAll().map { DriveTimerGroupSimple(it.id, it.name) }
         }
 
     private suspend fun getGroupsWithTimersUsingRelation() =

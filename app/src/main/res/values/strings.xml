@@ -8,4 +8,11 @@
     <string name="btn_add">add</string>
     <string name="screen_add_timer">Add timer</string>
     <string name="enter_timer_name">Enter name</string>
+    <string name="btn_cancel">cancel</string>
+    <string name="btn_save">Save</string>
+    <string name="text_field_group">Group</string>
+    <string name="color_red">Red</string>
+    <string name="color_green">Green</string>
+    <string name="color_blue">Blue</string>
+    <string name="text_field_color">Color</string>
 </resources>

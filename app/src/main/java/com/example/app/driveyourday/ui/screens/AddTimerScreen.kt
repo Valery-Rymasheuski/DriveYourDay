@@ -1,75 +1,105 @@
 package com.example.app.driveyourday.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.app.driveyourday.R
 import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
+import com.example.app.driveyourday.ui.components.CommonDropdown
+import com.example.app.driveyourday.util.NamedColor
+import com.example.app.driveyourday.util.constants.getDummyGroupsSimple
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AddTimerScreen(uiState: AddTimerUiState) {
+fun AddTimerScreen(
+    onCancelButtonClick: () -> Unit,
+    onSaveSuccessNavigate: () -> Unit,
+    viewModel: AddTimerViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    AddTimerScreen(
+        uiState = uiState,
+        onTimerNameChange = { viewModel.updateTimerName(it) },
+        onSelectTimerGroup = { viewModel.updateSelectedGroup(it) },
+        onSelectColor = { viewModel.updateSelectedColor(it) },
+        onSaveClick = { viewModel.save(onSaveSuccessNavigate) },
+        onCancelClick = onCancelButtonClick,
+        saveButtonEnabled = uiState.isFieldsValid(),
+    )
+}
 
-    var label: String by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-    var selectedTimerGroupName by remember {
-        mutableStateOf("")
-    }
-
-    val options = listOf("group1", "group2")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddTimerScreen(
+    uiState: AddTimerUiState,
+    onTimerNameChange: (String) -> Unit,
+    onSelectTimerGroup: (DriveTimerGroupSimple) -> Unit,
+    onSelectColor: (NamedColor) -> Unit,
+    onSaveClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    saveButtonEnabled: Boolean,
+) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         TextField(
-            value = label,
+            value = uiState.timerName,
             placeholder = { Text(text = stringResource(id = R.string.enter_timer_name)) },
-            onValueChange = { v -> label = v },
+            onValueChange = onTimerNameChange,
             modifier = Modifier.fillMaxWidth()
         )
+        CommonDropdown(
+            selectedValue = uiState.selectedTimerGroup,
+            labelResId = R.string.text_field_group,
+            options = uiState.groups,
+            getDisplayText = { it.name },
+            onOptionSelect = { onSelectTimerGroup(it) }
+        )
+        CommonDropdown(
+            selectedValue = uiState.selectedColor,
+            labelResId = R.string.text_field_color,
+            options = uiState.colors,
+            getDisplayText = { stringResource(it.nameResId) },
+            onOptionSelect = { onSelectColor(it) }
+        )
+        SaveButtonGroup(
+            onCancelClick = onCancelClick,
+            onSaveClick = onSaveClick,
+            saveButtonEnabled = saveButtonEnabled,
+        )
+    }
+}
 
-        ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
-            TextField(
-                value = selectedTimerGroupName,
-                onValueChange = {},
-                modifier = Modifier.menuAnchor(),
-                readOnly = true,
-                label = { Text("Label") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            )
-            ExposedDropdownMenu(expanded = expanded,
-                onDismissRequest = { expanded = false }) {
-                options.forEach{option ->
-                    DropdownMenuItem(
-                        text = { Text(option) },
-                        onClick = {
-                            selectedTimerGroupName = option
-                            expanded = false
-                        },
-                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    )
-                }
-            }
+@Composable
+fun SaveButtonGroup(
+    onCancelClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    saveButtonEnabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        OutlinedButton(modifier = Modifier.weight(1F), onClick = onCancelClick) {
+            Text(text = stringResource(R.string.btn_cancel).uppercase())
+        }
+        Button(
+            modifier = Modifier.weight(1F),
+            onClick = onSaveClick,
+            enabled = saveButtonEnabled
+        ) {
+            Text(text = stringResource(id = R.string.btn_save).uppercase())
         }
     }
 }
@@ -77,5 +107,7 @@ fun AddTimerScreen(uiState: AddTimerUiState) {
 @Preview
 @Composable
 fun AddTimerScreenPreview() {
-    AddTimerScreen(uiState = AddTimerUiState("test"))
+    AddTimerScreen(uiState = AddTimerUiState(getDummyGroupsSimple()),
+        {}, {}, {}, {}, {}, true
+    )
 }
