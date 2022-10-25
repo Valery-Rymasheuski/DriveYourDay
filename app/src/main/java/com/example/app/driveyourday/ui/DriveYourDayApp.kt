@@ -27,7 +27,7 @@ fun DriveYourDayApp() {
         val navController = rememberNavController()
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute =
-            backStackEntry?.destination?.route?.let { DriveDestinations.valueOf(it) }
+            backStackEntry?.destination?.route?.let { DriveDestinations.valueOf(it.substringBefore('?')) }
                 ?: DriveDestinations.HOME
         val showEditTimersButton = currentRoute == DriveDestinations.HOME
         val showMenuButton = currentRoute == DriveDestinations.HOME

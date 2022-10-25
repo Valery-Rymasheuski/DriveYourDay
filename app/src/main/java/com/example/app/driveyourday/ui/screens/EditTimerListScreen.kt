@@ -8,33 +8,57 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app.driveyourday.R
+import com.example.app.driveyourday.data.util.EntityId
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.util.constants.getDummyTimers
 
 @Composable
-fun EditTimerListScreen(uiState: EditTimerListUiState) {
-    EditTimerListScreen(timers = uiState.timers)
+fun EditTimerListScreen(
+    onEditButtonClick: (EntityId) -> Unit,
+    viewModel: EditTimerListViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    EditTimerListScreen(timers = uiState.timers,
+        onEditClick = { onEditButtonClick(it) },
+        onDeleteClick = { viewModel.delete(it) }
+    )
 }
 
 @Composable
-fun EditTimerListScreen(timers: List<DriveTimer>, modifier: Modifier = Modifier) {
+fun EditTimerListScreen(
+    timers: List<DriveTimer>,
+    onEditClick: (EntityId) -> Unit,
+    onDeleteClick: (EntityId) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier.padding(8.dp)) {
         timers.forEach {
-            EditTimerRow(timer = it)
+            EditTimerRow(
+                timer = it,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick,
+            )
         }
     }
-
 }
 
 @Composable
-fun EditTimerRow(timer: DriveTimer, modifier: Modifier = Modifier) {
+fun EditTimerRow(
+    timer: DriveTimer,
+    onEditClick: (EntityId) -> Unit,
+    onDeleteClick: (EntityId) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
@@ -46,7 +70,7 @@ fun EditTimerRow(timer: DriveTimer, modifier: Modifier = Modifier) {
             modifier = Modifier.weight(1F)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onEditClick(timer.id) },
             modifier = Modifier.padding(end = 8.dp)
         ) {
             Icon(
@@ -54,7 +78,7 @@ fun EditTimerRow(timer: DriveTimer, modifier: Modifier = Modifier) {
                 contentDescription = stringResource(R.string.btn_edit)
             )
         }
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { onDeleteClick(timer.id) }) {
             Icon(
                 imageVector = Icons.Filled.Delete,
                 contentDescription = stringResource(R.string.btn_delete)
@@ -65,6 +89,6 @@ fun EditTimerRow(timer: DriveTimer, modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun EditTimerListScreen() {
-    EditTimerListScreen(timers = getDummyTimers())
+fun EditTimerListScreenPreview() {
+    EditTimerListScreen(timers = getDummyTimers(), {}, {})
 }

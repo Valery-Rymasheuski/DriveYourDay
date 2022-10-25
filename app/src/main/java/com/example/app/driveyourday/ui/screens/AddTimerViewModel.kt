@@ -2,6 +2,7 @@ package com.example.app.driveyourday.ui.screens
 
 import android.util.Log
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app.driveyourday.R
@@ -10,6 +11,7 @@ import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
 import com.example.app.driveyourday.domain.repository.DriveTimersRepository
+import com.example.app.driveyourday.ui.navigation.ARG_TIMER_ID
 import com.example.app.driveyourday.util.NamedColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,10 +22,13 @@ private val TAG = AddTimerViewModel::class.simpleName
 
 @HiltViewModel
 class AddTimerViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val timersRepository: DriveTimersRepository,
     private val timerGroupsRepository: DriveTimerGroupsRepository
-) :
-    ViewModel() {
+) : ViewModel() {
+
+    private val editTimerIdStr: String? = savedStateHandle[ARG_TIMER_ID]
+
     private val _uiState = MutableStateFlow(AddTimerUiState(colors = getColors()))
     val uiState: StateFlow<AddTimerUiState> = _uiState.asStateFlow()
 
@@ -31,6 +36,18 @@ class AddTimerViewModel @Inject constructor(
         viewModelScope.launch {
             val groups = timerGroupsRepository.getSimpleGroups()
             _uiState.update { it.copy(groups = groups) }
+
+            if (editTimerIdStr != null) {
+                val editedTimer = timersRepository.getById(editTimerIdStr.toLong())
+                requireNotNull(editedTimer) //TODO
+                _uiState.update { oldState ->
+                    oldState.copy(timerName = editedTimer.label,
+                        editedId = editedTimer.id,
+                        selectedColor = oldState.colors.firstOrNull { color -> color.color == editedTimer.color },
+                        selectedTimerGroup = oldState.groups.firstOrNull { g -> g.id == editedTimer.groupId }
+                    )
+                }
+            }
         }
     }
 
@@ -47,19 +64,28 @@ class AddTimerViewModel @Inject constructor(
         _uiState.update { it.copy(selectedColor = color) }
     }
 
-    fun save(successNavigate: () -> Unit) {
+    fun save(
+        onNavigateToHome: () -> Unit,
+        onNavigateToEditTimerList: () -> Unit
+    ) {
         viewModelScope.launch { //TODO add ifStarted
             uiState.value.apply {
                 if (isFieldsValid()) {
+                    val id = editedId ?: ENTITY_EMPTY_ID
                     timersRepository.save(
                         DriveTimer(
-                            ENTITY_EMPTY_ID,
+                            id,
                             timerName,
                             selectedColor!!.color,
                             selectedTimerGroup!!.id
                         )
                     )
-                    successNavigate()
+                    if (editedId == null) {
+                        onNavigateToHome()
+                    } else {
+                        onNavigateToEditTimerList()
+                    }
+
                 } else {
                     Log.w(TAG, "Save failed because fields are not valid.")
                 }

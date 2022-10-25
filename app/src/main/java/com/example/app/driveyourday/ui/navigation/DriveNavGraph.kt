@@ -5,7 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.app.driveyourday.ui.screens.*
+
+const val ARG_TIMER_ID = "timerId"
 
 fun NavHostController.navigate(route: DriveDestinations) = navigate(route.name)
 
@@ -25,11 +28,21 @@ fun DriveNavGraph(
             SettingsRoute()
         }
         composable(DriveDestinations.EDIT_TIMERS.name) {
-            EditTimerListRoute()
+            EditTimerListScreen(
+                onEditButtonClick =
+                { id -> navController.navigate("${DriveDestinations.ADD_TIMER.name}?$ARG_TIMER_ID=$id") })
         }
-        composable(DriveDestinations.ADD_TIMER.name) {
-            AddTimerScreen(onCancelButtonClick = { navController.navigateUp() },
-                onSaveSuccessNavigate = { navController.navigate(DriveDestinations.HOME) })
+        composable(
+            "${DriveDestinations.ADD_TIMER.name}?$ARG_TIMER_ID={$ARG_TIMER_ID}",
+            arguments = listOf(navArgument(ARG_TIMER_ID) {
+                nullable = true
+            })
+        ) {
+            AddTimerScreen(
+                onCancelButtonClick = { navController.navigateUp() },
+                onNavigateToHome = { navController.navigate(DriveDestinations.HOME) },
+                onNavigateToEditTimerList = { navController.navigate(DriveDestinations.EDIT_TIMERS) }
+            )
         }
     }
 }

@@ -17,7 +17,8 @@ import com.example.app.driveyourday.util.constants.getDummyGroupsSimple
 @Composable
 fun AddTimerScreen(
     onCancelButtonClick: () -> Unit,
-    onSaveSuccessNavigate: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToEditTimerList: () -> Unit,
     viewModel: AddTimerViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -26,7 +27,7 @@ fun AddTimerScreen(
         onTimerNameChange = { viewModel.updateTimerName(it) },
         onSelectTimerGroup = { viewModel.updateSelectedGroup(it) },
         onSelectColor = { viewModel.updateSelectedColor(it) },
-        onSaveClick = { viewModel.save(onSaveSuccessNavigate) },
+        onSaveClick = { viewModel.save(onNavigateToHome, onNavigateToEditTimerList) },
         onCancelClick = onCancelButtonClick,
         saveButtonEnabled = uiState.isFieldsValid(),
     )

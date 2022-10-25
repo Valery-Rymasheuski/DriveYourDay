@@ -2,6 +2,8 @@ package com.example.app.driveyourday.data.repository
 
 import com.example.app.driveyourday.data.ds.TimersLocalDataSource
 import com.example.app.driveyourday.data.mappers.DriveTimerMapper
+import com.example.app.driveyourday.data.util.EntityId
+import com.example.app.driveyourday.data.util.isValidEntityId
 import com.example.app.driveyourday.di.modules.IoDispatcher
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.repository.DriveTimersRepository
@@ -20,6 +22,20 @@ class DriveTimersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun save(timer: DriveTimer) = withContext(ioDispatcher) {
-        localDataSource.insert(timerMapper.toEntity(timer))
+        timerMapper.toEntity(timer).let { entity ->
+            if (entity.id.isValidEntityId()) {
+                localDataSource.update(entity)
+            } else {
+                localDataSource.insert(entity)
+            }
+        }
+    }
+
+    override suspend fun delete(timer: DriveTimer) = withContext(ioDispatcher) {
+        localDataSource.delete(timerMapper.toEntity(timer))
+    }
+
+    override suspend fun getById(id: EntityId) = withContext(ioDispatcher) {
+        localDataSource.getById(id)?.let { timerMapper.fromEntity(it) }
     }
 }
