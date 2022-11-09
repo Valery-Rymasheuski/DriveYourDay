@@ -69,7 +69,7 @@ class AddTimerViewModel @Inject constructor(
         onNavigateToEditTimerList: () -> Unit
     ) {
         viewModelScope.launch { //TODO add ifStarted
-            uiState.value.apply {
+            uiState.value.run {
                 if (isFieldsValid()) {
                     val id = editedId ?: ENTITY_EMPTY_ID
                     timersRepository.save(
@@ -85,14 +85,12 @@ class AddTimerViewModel @Inject constructor(
                     } else {
                         onNavigateToEditTimerList()
                     }
-
                 } else {
                     Log.w(TAG, "Save failed because fields are not valid.")
                 }
             }
         }
     }
-
 
     private fun getColors(): List<NamedColor> = listOf(
         NamedColor(Color.Red, R.string.color_red),

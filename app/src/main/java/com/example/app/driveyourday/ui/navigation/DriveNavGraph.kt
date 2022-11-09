@@ -2,6 +2,7 @@ package com.example.app.driveyourday.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -40,7 +41,12 @@ fun DriveNavGraph(
         ) {
             AddTimerScreen(
                 onCancelButtonClick = { navController.navigateUp() },
-                onNavigateToHome = { navController.navigate(DriveDestinations.HOME) },
+                onNavigateToHome = {
+                    navController.navigate(
+                        DriveDestinations.HOME.name,
+                        NavOptions.Builder().setPopUpTo(DriveDestinations.HOME.name, true).build()
+                    )
+                },
                 onNavigateToEditTimerList = { navController.navigate(DriveDestinations.EDIT_TIMERS) }
             )
         }

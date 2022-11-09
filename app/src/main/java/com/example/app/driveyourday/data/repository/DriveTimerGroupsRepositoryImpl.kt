@@ -9,6 +9,8 @@ import com.example.app.driveyourday.domain.model.DriveTimerGroup
 import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class DriveTimerGroupsRepositoryImpl @Inject constructor(
@@ -18,6 +20,18 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
     private val timerMapper: DriveTimerMapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DriveTimerGroupsRepository {
+
+    override fun observeGroupsWithTimers(): Flow<List<DriveTimerGroup>> {
+        return localGroupsDataSource.observeGroupsWithTimers()
+            .map { groups ->
+                groups.map { (group, timers) ->
+                    groupMapper.fromEntity(
+                        group,
+                        timers
+                    )
+                }
+            }
+    }
 
     override suspend fun getGroupsWithTimers(): List<DriveTimerGroup> =
         withContext(ioDispatcher) {
@@ -32,7 +46,7 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
         }
 
     private suspend fun getGroupsWithTimersUsingRelation() =
-        localGroupsDataSource.getGroupWithTimers()
+        localGroupsDataSource.getGroupsWithTimers()
             .map { (group, timers) -> groupMapper.fromEntity(group, timers) }
 
     private suspend fun getGroupsWithTimersParallel(): List<DriveTimerGroup> {
