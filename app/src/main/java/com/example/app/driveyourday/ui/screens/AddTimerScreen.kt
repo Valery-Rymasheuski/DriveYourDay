@@ -9,6 +9,7 @@ import com.example.app.driveyourday.R
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import com.example.app.driveyourday.ui.components.CommonDropdown
 import com.example.app.driveyourday.util.NamedColor
@@ -19,6 +20,7 @@ fun AddTimerScreen(
     onCancelButtonClick: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToEditTimerList: () -> Unit,
+    onSuccessAdd: (DriveTimer) -> Unit,
     viewModel: AddTimerViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -27,7 +29,13 @@ fun AddTimerScreen(
         onTimerNameChange = { viewModel.updateTimerName(it) },
         onSelectTimerGroup = { viewModel.updateSelectedGroup(it) },
         onSelectColor = { viewModel.updateSelectedColor(it) },
-        onSaveClick = { viewModel.save(onNavigateToHome, onNavigateToEditTimerList) },
+        onSaveClick = {
+            viewModel.save(
+                onNavigateToHome,
+                onNavigateToEditTimerList,
+                onSuccessAdd,
+            )
+        },
         onCancelClick = onCancelButtonClick,
         saveButtonEnabled = uiState.isFieldsValid(),
     )

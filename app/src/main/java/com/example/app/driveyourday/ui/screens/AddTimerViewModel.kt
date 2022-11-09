@@ -66,21 +66,22 @@ class AddTimerViewModel @Inject constructor(
 
     fun save(
         onNavigateToHome: () -> Unit,
-        onNavigateToEditTimerList: () -> Unit
+        onNavigateToEditTimerList: () -> Unit,
+        onSuccessAdd: (DriveTimer) -> Unit,
     ) {
-        viewModelScope.launch { //TODO add ifStarted
+        viewModelScope.launch {
             uiState.value.run {
                 if (isFieldsValid()) {
                     val id = editedId ?: ENTITY_EMPTY_ID
-                    timersRepository.save(
-                        DriveTimer(
-                            id,
-                            timerName,
-                            selectedColor!!.color,
-                            selectedTimerGroup!!.id
-                        )
+                    val timer = DriveTimer(
+                        id,
+                        timerName,
+                        selectedColor!!.color,
+                        selectedTimerGroup!!.id
                     )
+                    timersRepository.save(timer)
                     if (editedId == null) {
+                        onSuccessAdd(timer)
                         onNavigateToHome()
                     } else {
                         onNavigateToEditTimerList()

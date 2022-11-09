@@ -3,9 +3,11 @@ package com.example.app.driveyourday.ui.screens
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import de.palm.composestateevents.consumed
+import de.palm.composestateevents.triggered
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,8 +37,15 @@ class HomeViewModel @Inject constructor(private val timerGroupsRepository: Drive
             //   val groups = timerGroupsRepository.getGroupsWithTimers() //without data updates
             //   _uiState.update { it.copy(isLoading = false, timerGroups = groups) }
         }
+    }
 
+    fun setAddedTimerEvent(addedTimer: DriveTimer) {
+        Log.e(TAG, "Added event, timer  = $addedTimer")
+        _uiState.update { it.copy(addedTimerEvent = triggered(addedTimer.label)) }
+    }
 
+    fun setAddedTimerEventConsumed() {
+        _uiState.update { it.copy(addedTimerEvent = consumed()) }
     }
 
     override fun onCleared() {

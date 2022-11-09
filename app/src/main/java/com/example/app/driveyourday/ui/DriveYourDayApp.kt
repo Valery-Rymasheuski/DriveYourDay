@@ -33,27 +33,32 @@ fun DriveYourDayApp() {
         val showMenuButton = currentRoute == DriveDestinations.HOME
         val canNavigateUp = navController.previousBackStackEntry != null
 
-        Scaffold(topBar = {
-            DriveTopAppBar(
-                currentRoute.titleResId,
-                { navController.navigate(DriveDestinations.EDIT_TIMERS.name) },
-                { navController.navigateUp() }, //TODO
-                canNavigateUp,
-                showEditTimersButton,
-                showMenuButton,
-            )
-        }, floatingActionButton = {
-            if (currentRoute == DriveDestinations.EDIT_TIMERS) {
-                FloatingActionButton(onClick = { navController.navigate(DriveDestinations.ADD_TIMER.name) }) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.btn_add)
-                    )
+        val scaffoldState: ScaffoldState = rememberScaffoldState()
+
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = {
+                DriveTopAppBar(
+                    currentRoute.titleResId,
+                    { navController.navigate(DriveDestinations.EDIT_TIMERS.name) },
+                    { navController.navigateUp() }, //TODO
+                    canNavigateUp,
+                    showEditTimersButton,
+                    showMenuButton,
+                )
+            }, floatingActionButton = {
+                if (currentRoute == DriveDestinations.EDIT_TIMERS) {
+                    FloatingActionButton(onClick = { navController.navigate(DriveDestinations.ADD_TIMER.name) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.btn_add)
+                        )
+                    }
                 }
-            }
-        }, floatingActionButtonPosition = FabPosition.End) {
+            }, floatingActionButtonPosition = FabPosition.End
+        ) {
             Box(modifier = Modifier.padding(it)) {
-                DriveNavGraph(navController)
+                DriveNavGraph(navController, scaffoldState = scaffoldState)
             }
         }
     }

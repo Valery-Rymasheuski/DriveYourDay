@@ -63,6 +63,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    implementation 'com.github.leonard-palm:compose-state-events:1.1.0'
+
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
     //Room
     implementation "androidx.room:room-runtime:$room_version"
