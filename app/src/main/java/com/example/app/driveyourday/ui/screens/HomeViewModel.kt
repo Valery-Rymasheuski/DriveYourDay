@@ -25,7 +25,6 @@ class HomeViewModel @Inject constructor(private val timerGroupsRepository: Drive
         Log.e(TAG, "Init")
         viewModelScope.launch {
             timerGroupsRepository.observeGroupsWithTimers().collect { groups ->
-                delay(1000)
                 Log.e(
                     TAG,
                     "Loaded timer groups with size ${groups.size} [${coroutineContext}]"

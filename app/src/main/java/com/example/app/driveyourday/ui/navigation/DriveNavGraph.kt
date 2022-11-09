@@ -42,10 +42,11 @@ fun DriveNavGraph(
             AddTimerScreen(
                 onCancelButtonClick = { navController.navigateUp() },
                 onNavigateToHome = {
-                    navController.navigate(
+                                   navController.popBackStack(DriveDestinations.HOME.name, false)
+                    /*navController.navigate(
                         DriveDestinations.HOME.name,
                         NavOptions.Builder().setPopUpTo(DriveDestinations.HOME.name, true).build()
-                    )
+                    )*/
                 },
                 onNavigateToEditTimerList = { navController.navigate(DriveDestinations.EDIT_TIMERS) }
             )
