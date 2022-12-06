@@ -16,4 +16,5 @@
     <string name="color_blue">Blue</string>
     <string name="text_field_color">Color</string>
     <string name="msg_added_timer">Added timer %s</string>
+    <string name="logged_in_success">You are successfully logged in</string>
 </resources>

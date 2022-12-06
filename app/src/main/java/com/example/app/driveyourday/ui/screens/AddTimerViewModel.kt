@@ -51,7 +51,6 @@ class AddTimerViewModel @Inject constructor(
         }
     }
 
-
     fun updateTimerName(name: String) {
         _uiState.update { it.copy(timerName = name) }
     }

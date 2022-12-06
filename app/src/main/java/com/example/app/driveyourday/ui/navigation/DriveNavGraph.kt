@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.app.driveyourday.ui.screens.*
+import com.example.app.driveyourday.ui.screens.login.loginGraph
 
 const val ARG_TIMER_ID = "timerId"
 
@@ -61,5 +62,7 @@ fun DriveNavGraph(
                 onSuccessAdd = { homeViewModel.setAddedTimerEvent(it) },
             )
         }
+
+        loginGraph(navController)
     }
 }
