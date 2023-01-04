@@ -9,6 +9,3 @@ enum class DriveDestinations(@StringRes val titleResId: Int) {
     EDIT_TIMERS(R.string.screen_edit_timers),
     ADD_TIMER(R.string.screen_add_timer),
 }
-
-class DriveNavigation {
-}

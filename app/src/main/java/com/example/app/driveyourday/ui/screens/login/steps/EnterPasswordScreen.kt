@@ -1,5 +1,6 @@
 package com.example.app.driveyourday.ui.screens.login.steps
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -10,21 +11,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.app.driveyourday.ui.screens.login.CommonLoginScreen
 import com.example.app.driveyourday.ui.screens.login.ErrorLabel
 import com.example.app.driveyourday.ui.screens.login.LoginStep
 import com.example.app.driveyourday.ui.screens.login.Outcome
-import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+private const val TAG = "EnterPasswordScreen"
+
 @Composable
 fun EnterPasswordScreen(
-    dataFlow: Flow<Outcome<LoginStep.EnterPasswordStep>>,
+    uiState: Outcome<LoginStep.EnterPasswordStep>,
     onPasswordEntered: (String) -> Unit
 ) {
-    val uiState by dataFlow.collectAsStateWithLifecycle(initialValue = Outcome.Success(LoginStep.EnterPasswordStep()))
+    Log.i(TAG, TAG)
     EnterPasswordScreenContent(uiState = uiState, onPasswordEntered = onPasswordEntered)
 }
 
@@ -33,6 +32,7 @@ fun EnterPasswordScreenContent(
     uiState: Outcome<LoginStep.EnterPasswordStep>,
     onPasswordEntered: (String) -> Unit
 ) {
+    Log.i(TAG, "EnterPasswordScreenContent")
     CommonLoginScreen(title = "Enter password") {
         Column {
             var text by rememberSaveable {

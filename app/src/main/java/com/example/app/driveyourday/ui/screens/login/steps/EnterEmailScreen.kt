@@ -1,5 +1,6 @@
 package com.example.app.driveyourday.ui.screens.login.steps
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -9,24 +10,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.app.driveyourday.ui.screens.login.*
-import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+private const val TAG = "EnterEmailScreen"
+
 @Composable
 fun EnterEmailScreen(
-    dataFlow: Flow<Outcome<LoginStep.EnterEmailStep>>,
+    uiState: Outcome<LoginStep.EnterEmailStep>,
     onEmailEntered: (String) -> Unit
 ) {
-    val uiState by dataFlow.collectAsStateWithLifecycle(
-        Outcome.Success(
-            LoginStep.EnterEmailStep(
-                null
-            )
-        )
-    )
+    Log.i(TAG, "$TAG uiState: $uiState")
     EnterEmailScreenContent(uiState = uiState, onEmailEntered = onEmailEntered)
 }
 
@@ -35,6 +28,7 @@ fun EnterEmailScreenContent(
     uiState: Outcome<LoginStep.EnterEmailStep>,
     onEmailEntered: (String) -> Unit
 ) {
+    Log.i(TAG, "EnterEmailScreenContent")
     var text by rememberSaveable {
         mutableStateOf(uiState.data.email.orEmpty())
     }

@@ -1,5 +1,6 @@
 package com.example.app.driveyourday.ui.navigation
 
+import android.util.Log
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -10,8 +11,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.app.driveyourday.ui.screens.*
+import com.example.app.driveyourday.ui.screens.login.LoginScreen
 import com.example.app.driveyourday.ui.screens.login.loginGraph
 
+const val TAG = "DriveNavGraph"
 const val ARG_TIMER_ID = "timerId"
 
 fun NavHostController.navigate(route: DriveDestinations) = navigate(route.name)
@@ -22,6 +25,7 @@ fun DriveNavGraph(
     startDestination: DriveDestinations = DriveDestinations.HOME,
     scaffoldState: ScaffoldState,
 ) {
+    Log.i(TAG, "init navGraph")
     NavHost(
         navController = navController,
         startDestination = startDestination.name
@@ -65,4 +69,5 @@ fun DriveNavGraph(
 
         loginGraph(navController)
     }
+    LoginScreen(navController = navController)
 }

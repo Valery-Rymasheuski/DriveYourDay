@@ -1,14 +1,13 @@
 package com.example.app.driveyourday.ui.screens.login
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed class Outcome<T>(open val data: T) {
+    @Immutable
     data class Loading<T>(override val data: T) : Outcome<T>(data)
+    @Immutable
     data class Success<T>(override val data: T) : Outcome<T>(data)
+    @Immutable
     data class Error<T>(override val data: T, val ex: Throwable) : Outcome<T>(data)
 }
-
-fun <T1, T2> Outcome<T1>.map(block: (T1) -> T2): Outcome<T2> =
-    when (this) {
-        is Outcome.Loading -> Outcome.Loading(block(data))
-        is Outcome.Success -> Outcome.Success(block(data))
-        is Outcome.Error -> Outcome.Error(block(data), ex)
-    }

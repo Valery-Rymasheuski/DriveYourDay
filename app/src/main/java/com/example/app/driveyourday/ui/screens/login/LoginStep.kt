@@ -1,6 +1,7 @@
 package com.example.app.driveyourday.ui.screens.login
 
 import android.os.Parcelable
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.parcelize.Parcelize
 
 enum class LoginFlowType {
@@ -21,17 +22,15 @@ data class LoginFilledData(
  *  Recompositions is emitted if input is the same (uses equals()), and having a new instance (class) the equals() will return false.
  */
 sealed class LoginStep(val id: LoginNavId) {
-    object Start : LoginStep(LoginNavId.START)
-    class EnterOptionsStep(val options: List<String>) : LoginStep(LoginNavId.OPTIONS)
-    class EnterEmailStep(val email: String?) : LoginStep(LoginNavId.EMAIL)
-    class EnterPasswordStep() : LoginStep(LoginNavId.PASSWORD)
-    object End : LoginStep(LoginNavId.END)
+    class EnterOptionsStep(val options: ImmutableList<String>) : LoginStep(LoginNavId.LOGIN_OPTIONS)
+    class EnterEmailStep(val email: String?) : LoginStep(LoginNavId.LOGIN_EMAIL)
+    class EnterPasswordStep() : LoginStep(LoginNavId.LOGIN_PASSWORD)
+    object End : LoginStep(LoginNavId.LOGIN_END)
 }
 
 enum class LoginNavId {
-    START,
-    OPTIONS,
-    EMAIL,
-    PASSWORD,
-    END,
+    LOGIN_OPTIONS,
+    LOGIN_EMAIL,
+    LOGIN_PASSWORD,
+    LOGIN_END,
 }
