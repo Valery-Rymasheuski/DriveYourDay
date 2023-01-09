@@ -4,6 +4,9 @@ import com.example.app.driveyourday.data.ds.TimerGroupsLocalDataSource
 import com.example.app.driveyourday.data.ds.TimersLocalDataSource
 import com.example.app.driveyourday.data.mappers.DriveTimerGroupMapper
 import com.example.app.driveyourday.data.mappers.DriveTimerMapper
+import com.example.app.driveyourday.data.mappers.SimpleTimerGroupMapper
+import com.example.app.driveyourday.data.util.EntityId
+import com.example.app.driveyourday.data.util.isValidEntityId
 import com.example.app.driveyourday.di.modules.IoDispatcher
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
 import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
@@ -17,6 +20,7 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
     private val localGroupsDataSource: TimerGroupsLocalDataSource,
     private val localTimersDataSource: TimersLocalDataSource,
     private val groupMapper: DriveTimerGroupMapper,
+    private val simpleGroupMapper: SimpleTimerGroupMapper,
     private val timerMapper: DriveTimerMapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DriveTimerGroupsRepository {
@@ -42,7 +46,7 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
 
     override suspend fun getSimpleGroups(): List<DriveTimerGroupSimple> =
         withContext(ioDispatcher) {
-            localGroupsDataSource.getAll().map { DriveTimerGroupSimple(it.id, it.name) }
+            localGroupsDataSource.getAll().map { simpleGroupMapper.fromEntity(it) }
         }
 
     private suspend fun getGroupsWithTimersUsingRelation() =
@@ -59,5 +63,25 @@ class DriveTimerGroupsRepositoryImpl @Inject constructor(
             val timersMap = timers.groupBy { it.groupId }
             groups.map { groupMapper.fromEntity(it, timersMap.getOrElse(it.id) { emptyList() }) }
         }
+    }
+
+    override suspend fun delete(group: DriveTimerGroupSimple) {
+        withContext(ioDispatcher) {
+            localGroupsDataSource.delete(simpleGroupMapper.toEntity(group))
+        }
+    }
+
+    override suspend fun save(group: DriveTimerGroupSimple): Unit = withContext(ioDispatcher) {
+        simpleGroupMapper.toEntity(group).let {
+            if (group.id.isValidEntityId()) {
+                localGroupsDataSource.update(it)
+            } else {
+                localGroupsDataSource.insert(it)
+            }
+        }
+    }
+
+    override suspend fun getById(id: EntityId) = withContext(ioDispatcher) {
+        localGroupsDataSource.getById(id)?.let { simpleGroupMapper.fromEntity(it) }
     }
 }

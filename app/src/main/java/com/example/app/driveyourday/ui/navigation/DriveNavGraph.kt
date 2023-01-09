@@ -16,6 +16,7 @@ import com.example.app.driveyourday.ui.screens.login.loginGraph
 
 const val TAG = "DriveNavGraph"
 const val ARG_TIMER_ID = "timerId"
+const val ARG_TIMER_GROUP_ID = "timerGroupId"
 
 fun NavHostController.navigate(route: DriveDestinations) = navigate(route.name)
 
@@ -65,6 +66,18 @@ fun DriveNavGraph(
                 onNavigateToEditTimerList = { navController.navigate(DriveDestinations.EDIT_TIMERS) },
                 onSuccessAdd = { homeViewModel.setAddedTimerEvent(it) },
             )
+        }
+        composable(DriveDestinations.EDIT_TIMER_GROUPS.name) {
+            EditTimerGroupsScreen(onEditClick = { id -> navController.navigate("${DriveDestinations.ADD_TIMER_GROUP.name}?$ARG_TIMER_GROUP_ID=$id") })
+        }
+        composable(
+            route = "${DriveDestinations.ADD_TIMER_GROUP.name}?$ARG_TIMER_GROUP_ID={$ARG_TIMER_GROUP_ID}",
+            arguments = listOf(navArgument(ARG_TIMER_GROUP_ID) {
+                nullable = true
+            })
+        ) {
+            AddTimerGroupScreen(onCancelClick = { navController.navigateUp() },
+                onSuccessAdd = { navController.navigateUp() })
         }
 
         loginGraph(navController)

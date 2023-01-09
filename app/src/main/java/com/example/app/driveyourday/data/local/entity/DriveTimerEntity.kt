@@ -3,11 +3,13 @@ package com.example.app.driveyourday.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "dyd_timer", foreignKeys = [ForeignKey(
         entity = DriveTimerGroupEntity::class,
+        onDelete = CASCADE,
         parentColumns = arrayOf("group_id"),
         childColumns = arrayOf("group_id"),
     )]

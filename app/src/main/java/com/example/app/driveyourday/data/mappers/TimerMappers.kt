@@ -6,6 +6,7 @@ import com.example.app.driveyourday.data.local.entity.DriveTimerEntity
 import com.example.app.driveyourday.data.local.entity.DriveTimerGroupEntity
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
+import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import javax.inject.Inject
 
 class DriveTimerMapper @Inject constructor() : EntityMapper<DriveTimerEntity, DriveTimer> {
@@ -16,7 +17,6 @@ class DriveTimerMapper @Inject constructor() : EntityMapper<DriveTimerEntity, Dr
     override fun toEntity(domain: DriveTimer): DriveTimerEntity =
         DriveTimerEntity(domain.label, domain.color.mapColorToLong(), domain.groupId, domain.id)
 }
-
 
 class DriveTimerGroupMapper @Inject constructor(private val timerMapper: DriveTimerMapper) {
 
@@ -33,6 +33,16 @@ class DriveTimerGroupMapper @Inject constructor(private val timerMapper: DriveTi
 
     fun toEntity(domain: DriveTimerGroup): DriveTimerGroupEntity =
         DriveTimerGroupEntity(domain.name, domain.orderNumber, domain.id)
+}
+
+class SimpleTimerGroupMapper @Inject constructor() :
+    EntityMapper<DriveTimerGroupEntity, DriveTimerGroupSimple> {
+
+    override fun fromEntity(entity: DriveTimerGroupEntity): DriveTimerGroupSimple =
+        DriveTimerGroupSimple(entity.id, entity.name, entity.orderNumber)
+
+    override fun toEntity(domain: DriveTimerGroupSimple): DriveTimerGroupEntity =
+        DriveTimerGroupEntity(domain.name, domain.orderNumber, id = domain.id)
 }
 
 fun Color.mapColorToLong(): Long = toArgb().toLong()

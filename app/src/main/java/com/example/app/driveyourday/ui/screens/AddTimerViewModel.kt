@@ -27,7 +27,7 @@ class AddTimerViewModel @Inject constructor(
     private val timerGroupsRepository: DriveTimerGroupsRepository
 ) : ViewModel() {
 
-    private val editTimerIdStr: String? = savedStateHandle[ARG_TIMER_ID]
+    private val editTimerId = savedStateHandle.get<String>(ARG_TIMER_ID)?.toLong()
 
     private val _uiState = MutableStateFlow(AddTimerUiState(colors = getColors()))
     val uiState: StateFlow<AddTimerUiState> = _uiState.asStateFlow()
@@ -37,8 +37,8 @@ class AddTimerViewModel @Inject constructor(
             val groups = timerGroupsRepository.getSimpleGroups()
             _uiState.update { it.copy(groups = groups) }
 
-            if (editTimerIdStr != null) {
-                val editedTimer = timersRepository.getById(editTimerIdStr.toLong())
+            if (editTimerId != null) {
+                val editedTimer = timersRepository.getById(editTimerId)
                 requireNotNull(editedTimer) //TODO
                 _uiState.update { oldState ->
                     oldState.copy(timerName = editedTimer.label,
@@ -86,7 +86,7 @@ class AddTimerViewModel @Inject constructor(
                         onNavigateToEditTimerList()
                     }
                 } else {
-                    Log.w(TAG, "Save failed because fields are not valid.")
+                    Log.w(TAG, "Save skipped because fields are not valid.")
                 }
             }
         }

@@ -12,6 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroupSimple
 import com.example.app.driveyourday.ui.components.CommonDropdown
+import com.example.app.driveyourday.ui.components.SaveButtonGroup
 import com.example.app.driveyourday.util.NamedColor
 import com.example.app.driveyourday.util.constants.getDummyGroupsSimple
 
@@ -84,32 +85,6 @@ fun AddTimerScreen(
             onSaveClick = onSaveClick,
             saveButtonEnabled = saveButtonEnabled,
         )
-    }
-}
-
-@Composable
-fun SaveButtonGroup(
-    onCancelClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    saveButtonEnabled: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        OutlinedButton(modifier = Modifier.weight(1F), onClick = onCancelClick) {
-            Text(text = stringResource(R.string.btn_cancel).uppercase())
-        }
-        Button(
-            modifier = Modifier.weight(1F),
-            onClick = onSaveClick,
-            enabled = saveButtonEnabled
-        ) {
-            Text(text = stringResource(id = R.string.btn_save).uppercase())
-        }
     }
 }
 

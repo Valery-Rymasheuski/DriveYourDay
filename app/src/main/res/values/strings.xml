@@ -4,6 +4,8 @@
     <string name="btn_delete">delete</string>
     <string name="screen_settings">Settings</string>
     <string name="screen_edit_timers">Edit Timers</string>
+    <string name="screen_edit_timer_groups">Edit timer groups</string>
+    <string name="screen_add_timer_group">Add timer group</string>
     <string name="screen_back">back</string>
     <string name="btn_add">add</string>
     <string name="screen_add_timer">Add timer</string>

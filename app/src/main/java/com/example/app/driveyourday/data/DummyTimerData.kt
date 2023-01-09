@@ -39,5 +39,5 @@ fun getDummyTimers(): List<DriveTimer> {
 }
 
 fun getDummyGroupsSimple(): List<DriveTimerGroupSimple> {
-    return getDummyTimerGroups().map { DriveTimerGroupSimple(it.id, it.name) }
+    return getDummyTimerGroups().map { DriveTimerGroupSimple(it.id, it.name, it.orderNumber) }
 }
