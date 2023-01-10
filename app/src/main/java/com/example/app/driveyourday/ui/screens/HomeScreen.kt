@@ -9,11 +9,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.app.driveyourday.domain.model.DriveTimer
 import com.example.app.driveyourday.domain.model.DriveTimerGroup
 import com.example.app.driveyourday.util.constants.getDummyTimerGroups
+import com.example.app.driveyourday.R
 
 @Composable
 fun HomeScreen(uiState: HomeUiState) {
@@ -36,9 +38,11 @@ fun TimerCards(groups: List<DriveTimerGroup>) {
 
 @Composable
 fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
-    Card(modifier = modifier
-        .fillMaxWidth()
-        .padding(8.dp)) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = timerGroup.name,
@@ -56,10 +60,10 @@ fun TimerButton(timer: DriveTimer, modifier: Modifier = Modifier) {
     Button(
         onClick = { /*TODO*/ },
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(containerColor =  timer.color)
+        colors = ButtonDefaults.buttonColors(containerColor = timer.color)
     ) {
         //TODO add icon
-        Text(text = timer.label)
+        Text(text = stringResource(id = R.string.timer_label_full, timer.label, timer.minutes))
     }
 }
 

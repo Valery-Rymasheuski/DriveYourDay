@@ -8,4 +8,5 @@ data class DriveTimer(
     val label: String,
     val color: Color,
     val groupId: EntityId,
+    val minutes: Short,
 )

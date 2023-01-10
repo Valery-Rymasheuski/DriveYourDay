@@ -12,10 +12,22 @@ import javax.inject.Inject
 class DriveTimerMapper @Inject constructor() : EntityMapper<DriveTimerEntity, DriveTimer> {
 
     override fun fromEntity(entity: DriveTimerEntity): DriveTimer =
-        DriveTimer(entity.id, entity.label, entity.color.mapLongToColor(), entity.groupId)
+        DriveTimer(
+            entity.id,
+            entity.label,
+            entity.color.mapLongToColor(),
+            entity.groupId,
+            entity.minutes
+        )
 
     override fun toEntity(domain: DriveTimer): DriveTimerEntity =
-        DriveTimerEntity(domain.label, domain.color.mapColorToLong(), domain.groupId, domain.id)
+        DriveTimerEntity(
+            domain.label,
+            domain.color.mapColorToLong(),
+            domain.groupId,
+            domain.minutes,
+            domain.id
+        )
 }
 
 class DriveTimerGroupMapper @Inject constructor(private val timerMapper: DriveTimerMapper) {

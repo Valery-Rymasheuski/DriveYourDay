@@ -18,6 +18,7 @@ data class DriveTimerEntity(
     @ColumnInfo(name = "label") val label: String,
     @ColumnInfo(name = "color") val color: Long,
     @ColumnInfo(name = "group_id") var groupId: Long = 0,
+    @ColumnInfo(name = "minutes") val minutes: Short,
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "timer_id") val id: Long = 0,
 )

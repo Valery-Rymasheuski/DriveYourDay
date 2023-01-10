@@ -15,12 +15,12 @@ val dummyTimerGroupEntities = listOf(
     DriveTimerGroupEntity(
         "Job", 1
     ) to listOf(
-        DriveTimerEntity("Working time", Color.Green.mapColorToLong()),
-        DriveTimerEntity("Relax time", Color.Red.mapColorToLong()),
+        DriveTimerEntity("Working time", Color.Green.mapColorToLong(), minutes = 30),
+        DriveTimerEntity("Relax time", Color.Red.mapColorToLong(), minutes = 40),
     ), DriveTimerGroupEntity(
         "Kitchen", 2
     ) to listOf(
-        DriveTimerEntity("Cooking time", Color.Magenta.mapColorToLong())
+        DriveTimerEntity("Cooking time", Color.Magenta.mapColorToLong(), minutes = 50)
     )
 )
 

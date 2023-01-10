@@ -44,7 +44,8 @@ class AddTimerViewModel @Inject constructor(
                     oldState.copy(timerName = editedTimer.label,
                         editedId = editedTimer.id,
                         selectedColor = oldState.colors.firstOrNull { color -> color.color == editedTimer.color },
-                        selectedTimerGroup = oldState.groups.firstOrNull { g -> g.id == editedTimer.groupId }
+                        selectedTimerGroup = oldState.groups.firstOrNull { g -> g.id == editedTimer.groupId },
+                        minutes = editedTimer.minutes.toString()
                     )
                 }
             }
@@ -53,6 +54,12 @@ class AddTimerViewModel @Inject constructor(
 
     fun updateTimerName(name: String) {
         _uiState.update { it.copy(timerName = name) }
+    }
+
+    fun updateMinutes(minutes: String) {
+        minutes.toShortOrNull()?.let {
+            _uiState.update { it.copy(minutes = minutes) }
+        }
     }
 
     fun updateSelectedGroup(group: DriveTimerGroupSimple) {
@@ -76,7 +83,8 @@ class AddTimerViewModel @Inject constructor(
                         id,
                         timerName,
                         selectedColor!!.color,
-                        selectedTimerGroup!!.id
+                        selectedTimerGroup!!.id,
+                        minutes.toShort(),
                     )
                     timersRepository.save(timer)
                     if (editedId == null) {

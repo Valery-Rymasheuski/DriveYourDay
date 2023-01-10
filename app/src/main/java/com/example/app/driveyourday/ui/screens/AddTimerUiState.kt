@@ -10,8 +10,9 @@ data class AddTimerUiState(
     val editedId: EntityId? = null,
     val timerName: String = "",
     val selectedTimerGroup: DriveTimerGroupSimple? = null,
-    val selectedColor: NamedColor? = null
+    val selectedColor: NamedColor? = null,
+    val minutes: String = "",
 ) {
     fun isFieldsValid() = timerName.isNotBlank() && selectedTimerGroup != null
-            && selectedColor != null
+            && selectedColor != null && minutes.isNotBlank()
 }

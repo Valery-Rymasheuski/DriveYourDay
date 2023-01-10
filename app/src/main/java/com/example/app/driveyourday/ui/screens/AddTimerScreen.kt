@@ -27,9 +27,10 @@ fun AddTimerScreen(
     val uiState by viewModel.uiState.collectAsState()
     AddTimerScreen(
         uiState = uiState,
-        onTimerNameChange = { viewModel.updateTimerName(it) },
-        onSelectTimerGroup = { viewModel.updateSelectedGroup(it) },
-        onSelectColor = { viewModel.updateSelectedColor(it) },
+        onTimerNameChange = viewModel::updateTimerName,
+        onSelectTimerGroup = viewModel::updateSelectedGroup,
+        onMinutesChange = viewModel::updateMinutes,
+        onSelectColor = viewModel::updateSelectedColor,
         onSaveClick = {
             viewModel.save(
                 onNavigateToHome,
@@ -49,6 +50,7 @@ fun AddTimerScreen(
     onTimerNameChange: (String) -> Unit,
     onSelectTimerGroup: (DriveTimerGroupSimple) -> Unit,
     onSelectColor: (NamedColor) -> Unit,
+    onMinutesChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit,
     saveButtonEnabled: Boolean,
@@ -80,6 +82,12 @@ fun AddTimerScreen(
             getDisplayText = { stringResource(it.nameResId) },
             onOptionSelect = { onSelectColor(it) }
         )
+        TextField(
+            value = uiState.minutes,
+            onValueChange = onMinutesChange,
+            placeholder = { Text(text = stringResource(id = R.string.enter_timer_minutes)) },
+            modifier = Modifier.fillMaxWidth()
+        )
         SaveButtonGroup(
             onCancelClick = onCancelClick,
             onSaveClick = onSaveClick,
@@ -92,6 +100,6 @@ fun AddTimerScreen(
 @Composable
 fun AddTimerScreenPreview() {
     AddTimerScreen(uiState = AddTimerUiState(getDummyGroupsSimple()),
-        {}, {}, {}, {}, {}, true
+        {}, {}, {}, {}, {}, {}, saveButtonEnabled = true
     )
 }
