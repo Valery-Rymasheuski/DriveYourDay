@@ -3,6 +3,8 @@ package com.example.app.driveyourday.ui
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -10,9 +12,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -21,13 +26,14 @@ import com.example.app.driveyourday.ui.components.AddFab
 import com.example.app.driveyourday.ui.navigation.DriveDestinations
 import com.example.app.driveyourday.ui.navigation.DriveNavGraph
 import com.example.app.driveyourday.ui.screens.login.ROUTE_LOGIN
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 private const val TAG = "DriveYourDayApp"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriveYourDayApp(navController: NavHostController = rememberNavController()) {
-
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute =
@@ -38,6 +44,85 @@ fun DriveYourDayApp(navController: NavHostController = rememberNavController()) 
                 .firstOrNull { it.name == routeWithoutParams } //TODO check LoginRoutes
         }
             ?: DriveDestinations.HOME
+
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = true,
+        drawerContent = {
+            ModalDrawerSheet() {
+                Spacer(Modifier.height(12.dp))
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_add_timer,
+                    iconVector = Icons.Default.Add,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.ADD_TIMER,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_edit_timers,
+                    iconVector = Icons.Default.Edit,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.EDIT_TIMERS,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_add_timer_group,
+                    iconVector = Icons.Default.Add,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.ADD_TIMER_GROUP,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_edit_timer_groups,
+                    iconVector = Icons.Default.Edit,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.EDIT_TIMER_GROUPS,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_settings,
+                    iconVector = Icons.Default.Settings,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.SETTINGS,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+                DriveDrawerItem(
+                    labelTextId = R.string.drawer_about,
+                    iconVector = Icons.Default.Face,
+                    currentRoute = currentRoute,
+                    destinationRoute = DriveDestinations.ABOUT,
+                    navController = navController,
+                    scope =scope ,
+                    drawerState =drawerState
+                )
+            }
+        }) {
+        DriveScaffold(navController = navController,
+            currentRoute = currentRoute,
+            menuButtonClick = { scope.launch { drawerState.open() } }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DriveScaffold(
+    navController: NavHostController,
+    currentRoute: DriveDestinations,
+    menuButtonClick: () -> Unit,
+) {
     val showEditTimersButton = currentRoute == DriveDestinations.HOME
     val showMenuButton = currentRoute == DriveDestinations.HOME
     val showLoginButton = currentRoute == DriveDestinations.HOME
@@ -53,10 +138,11 @@ fun DriveYourDayApp(navController: NavHostController = rememberNavController()) 
                 onEditTimersClick = { navController.navigate(DriveDestinations.EDIT_TIMERS.name) },
                 onLoginClick = { navController.navigate(ROUTE_LOGIN) },
                 { navController.navigateUp() }, //TODO
-                canNavigateUp,
+                menuButtonClick = menuButtonClick,
+                canNavigateUp = canNavigateUp,
                 showEditTimersButton = showEditTimersButton,
-                showLoginButton,
-                showMenuButton,
+                showLoginButton = showLoginButton,
+                showMenuButton = showMenuButton,
             )
         }, floatingActionButton = {
             val fabClickDestination = when (currentRoute) {
@@ -80,6 +166,33 @@ fun DriveYourDayApp(navController: NavHostController = rememberNavController()) 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DriveDrawerItem(
+    @StringRes labelTextId: Int,
+    iconVector: ImageVector,
+    currentRoute: DriveDestinations,
+    destinationRoute: DriveDestinations,
+    navController: NavHostController,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+) {
+    NavigationDrawerItem(label = { Text(text = stringResource(id = labelTextId)) },
+        icon = {
+            Icon(
+                imageVector = iconVector,
+                contentDescription = null
+            )
+        },
+        selected = currentRoute == destinationRoute,
+        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        onClick = {
+            scope.launch {
+                drawerState.close() //TODO is it necessary?
+            }
+            navController.navigate(destinationRoute.name)
+        })
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +201,7 @@ fun DriveTopAppBar(
     onEditTimersClick: () -> Unit,
     onLoginClick: () -> Unit,
     navigateUp: () -> Unit,
+    menuButtonClick: () -> Unit,
     canNavigateUp: Boolean,
     showEditTimersButton: Boolean,
     showLoginButton: Boolean,
@@ -102,7 +216,7 @@ fun DriveTopAppBar(
     },
         navigationIcon = {
             if (showMenuButton) {
-                IconButton(onClick = { /*TODO*/ }) { //TODO
+                IconButton(onClick = menuButtonClick) {
                     Icon(imageVector = Icons.Filled.Menu, contentDescription = "null")
                 }
             } else {

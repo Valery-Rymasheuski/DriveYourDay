@@ -37,6 +37,9 @@ fun DriveNavGraph(
         composable(DriveDestinations.SETTINGS.name) {
             SettingsRoute()
         }
+        composable(DriveDestinations.ABOUT.name) {
+            AboutScreen()
+        }
         composable(DriveDestinations.EDIT_TIMERS.name) {
             EditTimerListScreen(
                 onEditButtonClick =
