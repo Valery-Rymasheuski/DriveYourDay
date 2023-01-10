@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,6 +24,7 @@ import com.example.app.driveyourday.ui.screens.login.ROUTE_LOGIN
 
 private const val TAG = "DriveYourDayApp"
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriveYourDayApp(navController: NavHostController = rememberNavController()) {
 
@@ -41,14 +43,14 @@ fun DriveYourDayApp(navController: NavHostController = rememberNavController()) 
     val showLoginButton = currentRoute == DriveDestinations.HOME
     val canNavigateUp = navController.previousBackStackEntry != null
 
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             DriveTopAppBar(
                 currentRoute.titleResId,
-                onEditTimersClick = { navController.navigate(DriveDestinations.EDIT_TIMER_GROUPS.name) },
+                onEditTimersClick = { navController.navigate(DriveDestinations.EDIT_TIMERS.name) },
                 onLoginClick = { navController.navigate(ROUTE_LOGIN) },
                 { navController.navigateUp() }, //TODO
                 canNavigateUp,
@@ -72,13 +74,14 @@ fun DriveYourDayApp(navController: NavHostController = rememberNavController()) 
         Box(modifier = Modifier.padding(it)) {
             DriveNavGraph(
                 navController,
-                scaffoldState = scaffoldState
+                snackbarHostState = snackbarHostState,
             )
         }
     }
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriveTopAppBar(
     @StringRes titleResId: Int,

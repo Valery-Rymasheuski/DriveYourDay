@@ -1,7 +1,7 @@
 package com.example.app.driveyourday.ui.navigation
 
 import android.util.Log
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +24,7 @@ fun NavHostController.navigate(route: DriveDestinations) = navigate(route.name)
 fun DriveNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: DriveDestinations = DriveDestinations.HOME,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
 ) {
     Log.i(TAG, "init navGraph")
     NavHost(
@@ -32,7 +32,7 @@ fun DriveNavGraph(
         startDestination = startDestination.name
     ) {
         composable(DriveDestinations.HOME.name) {
-            HomeRoute(scaffoldState = scaffoldState)
+            HomeRoute(snackbarHostState = snackbarHostState)
         }
         composable(DriveDestinations.SETTINGS.name) {
             SettingsRoute()

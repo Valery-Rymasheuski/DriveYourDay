@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +42,7 @@ fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = timerGroup.name,
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.headlineSmall
             )
             timerGroup.timers.forEach {
                 TimerButton(timer = it)
@@ -56,7 +56,7 @@ fun TimerButton(timer: DriveTimer, modifier: Modifier = Modifier) {
     Button(
         onClick = { /*TODO*/ },
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(backgroundColor = timer.color)
+        colors = ButtonDefaults.buttonColors(containerColor =  timer.color)
     ) {
         //TODO add icon
         Text(text = timer.label)

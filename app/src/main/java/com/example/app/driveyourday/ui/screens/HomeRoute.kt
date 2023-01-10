@@ -1,6 +1,6 @@
 package com.example.app.driveyourday.ui.screens
 
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
@@ -14,7 +14,7 @@ import de.palm.composestateevents.EventEffect
 @Composable
 fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -22,7 +22,7 @@ fun HomeRoute(
     EventEffect(event = uiState.addedTimerEvent,
         onConsumed = { viewModel.setAddedTimerEventConsumed() },
         action = { timerName ->
-            scaffoldState.snackbarHostState.showSnackbar(
+            snackbarHostState.showSnackbar(
                 context.resources.getString(
                     R.string.msg_added_timer,
                     timerName
