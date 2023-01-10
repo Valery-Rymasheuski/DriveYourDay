@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.example.app.driveyourday.domain.repository.UserPreferencesRepository
 import com.example.app.driveyourday.ui.navigation.NavigationManager
 import com.example.app.driveyourday.ui.navigation.TAG
 import com.example.app.driveyourday.ui.theme.DriveYourDayTheme
@@ -20,6 +22,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var navigationManager: NavigationManager
+
+    @Inject
+    lateinit var userPreferencesRepository: UserPreferencesRepository
 
     @OptIn(ExperimentalLifecycleComposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +52,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                DriveYourDayApp(navController)
+                val bottomNavigation by userPreferencesRepository.bottomNavigationFlow.collectAsStateWithLifecycle(
+                    false
+                )//TODO remove initial value
+                DriveYourDayApp(navController, bottomNavigation)
             }
         }
     }
@@ -56,5 +64,5 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    DriveYourDayApp()
+    DriveYourDayApp(bottomNavigation = false)
 }

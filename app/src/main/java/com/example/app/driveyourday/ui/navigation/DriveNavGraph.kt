@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,17 +26,19 @@ fun DriveNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: DriveDestinations = DriveDestinations.HOME,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
 ) {
     Log.i(TAG, "init navGraph")
     NavHost(
         navController = navController,
-        startDestination = startDestination.name
+        startDestination = startDestination.name,
+        modifier = modifier,
     ) {
         composable(DriveDestinations.HOME.name) {
             HomeRoute(snackbarHostState = snackbarHostState)
         }
         composable(DriveDestinations.SETTINGS.name) {
-            SettingsRoute()
+            SettingsScreen()
         }
         composable(DriveDestinations.ABOUT.name) {
             AboutScreen()
