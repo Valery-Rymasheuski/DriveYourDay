@@ -85,6 +85,9 @@ fun DriveNavGraph(
             AddTimerGroupScreen(onCancelClick = { navController.navigateUp() },
                 onSuccessAdd = { navController.navigateUp() })
         }
+        composable(DriveDestinations.COUNTDOWNS.name) {
+            CountdownsScreen()
+        }
 
         loginGraph(navController)
     }

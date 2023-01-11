@@ -1,6 +1,7 @@
 package com.example.app.driveyourday.di.modules
 
 import android.content.Context
+import com.example.app.driveyourday.data.local.dao.CountDownDao
 import com.example.app.driveyourday.data.local.dao.TimerDao
 import com.example.app.driveyourday.data.local.dao.TimerGroupDao
 import com.example.app.driveyourday.data.local.database.DriveYourDayDatabase
@@ -50,4 +51,6 @@ class DatabaseModule {
     @Provides
     fun provideTimerGroupDao(db: DriveYourDayDatabase): TimerGroupDao = db.timerGroupDao()
 
+    @Provides
+    fun provideCountdownDao(db: DriveYourDayDatabase): CountDownDao = db.countdownDao()
 }

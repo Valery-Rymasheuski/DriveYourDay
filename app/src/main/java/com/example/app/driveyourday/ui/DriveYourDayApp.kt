@@ -64,6 +64,15 @@ fun DriveYourDayApp(
                 ModalDrawerSheet() {
                     Spacer(Modifier.height(12.dp))
                     DriveDrawerItem(
+                        labelTextId = R.string.drawer_countdowns,
+                        iconVector = Icons.Default.PlayArrow,
+                        currentRoute = currentRoute,
+                        destinationRoute = DriveDestinations.COUNTDOWNS,
+                        navController = navController,
+                        scope = scope,
+                        drawerState = drawerState
+                    )
+                    DriveDrawerItem(
                         labelTextId = R.string.drawer_add_timer,
                         iconVector = Icons.Default.Add,
                         currentRoute = currentRoute,
@@ -193,6 +202,13 @@ fun DriveNavigationBar(
 ) {
     NavigationBar() {
         DriveNavBarItem(
+            labelTextId = R.string.nav_bar_countdowns,
+            icon = Icons.Default.PlayArrow,
+            navController = navController,
+            currentRoute = currentRoute,
+            destinationRoute = DriveDestinations.COUNTDOWNS
+        )
+        DriveNavBarItem(
             labelTextId = R.string.nav_bar_timers,
             icon = Icons.Default.Edit,
             navController = navController,
@@ -201,7 +217,7 @@ fun DriveNavigationBar(
         )
         DriveNavBarItem(
             labelTextId = R.string.nav_bar_groups,
-            icon = Icons.Default.Edit,
+            icon = Icons.Default.List,
             navController = navController,
             currentRoute = currentRoute,
             destinationRoute = DriveDestinations.EDIT_TIMER_GROUPS

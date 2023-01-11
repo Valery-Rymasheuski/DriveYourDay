@@ -8,6 +8,7 @@ data class HomeUiState(
     val isLoading: Boolean = false,
     val timerGroups: List<DriveTimerGroup> = emptyList(),
     val addedTimerEvent: StateEventWithContent<String> = consumed(),
+    val startedTimerEvent: StateEventWithContent<String> = consumed(),
 
     )
 

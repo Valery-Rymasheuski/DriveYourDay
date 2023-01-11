@@ -18,26 +18,39 @@ import com.example.app.driveyourday.util.constants.getDummyTimerGroups
 import com.example.app.driveyourday.R
 
 @Composable
-fun HomeScreen(uiState: HomeUiState) {
-    HomeScreen(groups = uiState.timerGroups)
+fun HomeScreen(
+    uiState: HomeUiState,
+    onTimerClick: (DriveTimer) -> Unit,
+) {
+    HomeScreen(groups = uiState.timerGroups, onTimerClick = onTimerClick)
 }
 
 @Composable
-fun HomeScreen(groups: List<DriveTimerGroup>) {
-    TimerCards(groups = groups)
+fun HomeScreen(
+    groups: List<DriveTimerGroup>,
+    onTimerClick: (DriveTimer) -> Unit
+) {
+    TimerCards(groups = groups, onTimerClick = onTimerClick)
 }
 
 @Composable
-fun TimerCards(groups: List<DriveTimerGroup>) {
+fun TimerCards(
+    groups: List<DriveTimerGroup>,
+    onTimerClick: (DriveTimer) -> Unit,
+) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(groups, key = { it.id }) {
-            TimerCard(timerGroup = it)
+            TimerCard(timerGroup = it, onTimerClick = onTimerClick)
         }
     }
 }
 
 @Composable
-fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
+fun TimerCard(
+    timerGroup: DriveTimerGroup,
+    onTimerClick: (DriveTimer) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -49,16 +62,20 @@ fun TimerCard(timerGroup: DriveTimerGroup, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall
             )
             timerGroup.timers.forEach {
-                TimerButton(timer = it)
+                TimerButton(timer = it, onTimerClick = onTimerClick)
             }
         }
     }
 }
 
 @Composable
-fun TimerButton(timer: DriveTimer, modifier: Modifier = Modifier) {
+fun TimerButton(
+    timer: DriveTimer,
+    modifier: Modifier = Modifier,
+    onTimerClick: (DriveTimer) -> Unit,
+) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { onTimerClick(timer) },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(containerColor = timer.color)
     ) {
@@ -70,5 +87,5 @@ fun TimerButton(timer: DriveTimer, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    TimerCards(getDummyTimerGroups())
+    TimerCards(getDummyTimerGroups(), {})
 }

@@ -29,5 +29,15 @@ fun HomeRoute(
                 )
             )
         })
-    HomeScreen(uiState) //TODO remove HomeRoute ?
+    EventEffect(event = uiState.startedTimerEvent,
+        onConsumed = { viewModel.setStartedTimerEventConsumed() },
+        action = { timerName ->
+            snackbarHostState.showSnackbar(
+                context.resources.getString(
+                    R.string.msg_started_timer,
+                    timerName
+                )
+            )
+        })
+    HomeScreen(uiState, viewModel::startTimer) //TODO remove HomeRoute ?
 }

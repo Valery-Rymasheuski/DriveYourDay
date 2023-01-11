@@ -1,8 +1,10 @@
 package com.example.app.driveyourday.di.modules
 
+import com.example.app.driveyourday.data.repository.CountdownRepositoryImpl
 import com.example.app.driveyourday.data.repository.DriveTimerGroupsRepositoryImpl
 import com.example.app.driveyourday.data.repository.DriveTimersRepositoryImpl
 import com.example.app.driveyourday.data.repository.login.LoginRepositoryImpl
+import com.example.app.driveyourday.domain.repository.CountdownRepository
 import com.example.app.driveyourday.domain.repository.DriveTimerGroupsRepository
 import com.example.app.driveyourday.domain.repository.DriveTimersRepository
 import com.example.app.driveyourday.domain.repository.login.LoginRepository
@@ -23,4 +25,7 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindsLoginRepository(repository: LoginRepositoryImpl): LoginRepository
+
+    @Binds
+    abstract fun bindsCountdownRepository(repository: CountdownRepositoryImpl): CountdownRepository
 }
