@@ -37,6 +37,13 @@
     <string name="enter_timer_minutes">Enter minutes</string>
     <string name="timer_label_full">%1$s (%2$d min)</string>
     <string name="started_countdowns">Started timers</string>
-    <string name="countdown_left_minutes">%1$d minutes left</string>
+    <string name="countdown_expired">Expired</string>
     <string name="msg_started_timer">Started timer %1$s</string>
+    <string name="countdown_left_zero_minutes">&lt; 1 minute left</string>
+
+    <plurals name="countdown_left_minutes">
+        <item quantity="zero">@string/countdown_left_zero_minutes</item>
+        <item quantity="one">&lt; 2 minute left</item>
+        <item quantity="other">%1$d minutes left</item>
+    </plurals>
 </resources>

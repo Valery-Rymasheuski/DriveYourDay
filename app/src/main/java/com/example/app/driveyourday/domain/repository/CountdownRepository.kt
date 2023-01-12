@@ -11,4 +11,6 @@ interface CountdownRepository {
     suspend fun insert(entity: Countdown): EntityId
 
     suspend fun startTimer(timer: DriveTimer): EntityId
+
+    suspend fun findById(id: EntityId): Countdown?
 }

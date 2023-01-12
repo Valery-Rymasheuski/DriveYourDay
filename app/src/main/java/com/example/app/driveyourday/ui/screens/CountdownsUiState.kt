@@ -10,4 +10,5 @@ data class CountdownsUiState(
 data class CountdownAtTimeInfo(
     val countdown: Countdown,
     val leftMinutes: Long,
+    val expired: Boolean,
 )

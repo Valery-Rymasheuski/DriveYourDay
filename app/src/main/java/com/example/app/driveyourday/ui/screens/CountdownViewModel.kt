@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app.driveyourday.domain.model.Countdown
 import com.example.app.driveyourday.domain.model.getLeftMinutes
+import com.example.app.driveyourday.domain.model.isExpired
 import com.example.app.driveyourday.domain.repository.CountdownRepository
 import com.example.app.driveyourday.util.ONE_MINUTE
 import com.example.app.driveyourday.util.getCurrentMillis
@@ -46,6 +47,11 @@ class CountdownViewModel @Inject constructor(private val countdownRepository: Co
 
     private fun mapAtTimeMoment(items: List<Countdown>): List<CountdownAtTimeInfo> {
         val currentMillis = getCurrentMillis()
-        return items.map { item -> CountdownAtTimeInfo(item, item.getLeftMinutes(currentMillis)) }
+        return items.map { item ->
+            CountdownAtTimeInfo(
+                item, item.getLeftMinutes(currentMillis),
+                item.isExpired(currentMillis)
+            )
+        }
     }
 }

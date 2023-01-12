@@ -57,8 +57,11 @@ class HomeViewModel @Inject constructor(
 
     fun startTimer(timer: DriveTimer) {
         viewModelScope.launch {
-            countdownRepository.startTimer(timer)
-            _uiState.update { it.copy(startedTimerEvent = triggered(timer.label)) }
+            val countdownId = countdownRepository.startTimer(timer)
+            countdownRepository.findById(countdownId).let { countdown ->
+                requireNotNull(countdown)
+                _uiState.update { it.copy(startedTimerEvent = triggered(countdown)) }
+            }
         }
     }
 }

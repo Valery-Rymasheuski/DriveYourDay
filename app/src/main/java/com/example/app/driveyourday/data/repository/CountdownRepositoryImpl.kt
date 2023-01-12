@@ -38,4 +38,8 @@ class CountdownRepositoryImpl @Inject constructor(
         )
         localDataSource.insert(countdownMapper.toEntity(countdown))
     }
+
+    override suspend fun findById(id: EntityId): Countdown? = withContext(ioDispatcher) {
+        localDataSource.getById(id)?.let { countdownMapper.fromEntity(it) }
+    }
 }
